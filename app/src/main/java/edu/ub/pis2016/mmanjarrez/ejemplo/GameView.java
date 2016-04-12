@@ -14,6 +14,8 @@ import android.view.SurfaceView;
 public class GameView extends SurfaceView {
     private Bitmap bmp;
     private final SurfaceHolder holder;
+    private int x=100;
+    private int y=100;
 
     //public GameView(Context context) {
       //  super(context);
@@ -47,6 +49,6 @@ public class GameView extends SurfaceView {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawColor(Color.BLUE);
-        canvas.drawBitmap(bmp, -800, -500, null);
+        canvas.drawBitmap(bmp, -1000, -1000, null);
     }
 }
