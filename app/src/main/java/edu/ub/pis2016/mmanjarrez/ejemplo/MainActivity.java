@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -24,12 +23,14 @@ public class MainActivity extends Activity {
     private int x=100;
     private int y=100;
     private Bitmap bmp2;
+    private Sprite sprite;
+    private FondosJuego fondo;
+    private Canvas c = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //setContentView(new GameView(this));
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         gameLoopThread = new GameLoopThread(this);
@@ -39,7 +40,6 @@ public class MainActivity extends Activity {
             public void surfaceCreated(SurfaceHolder holder) {
                 gameLoopThread.setRunning(true);
                 gameLoopThread.start();
-
 
             }
 
@@ -63,7 +63,10 @@ public class MainActivity extends Activity {
             }
         });
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.plano);
-        bmp2 = BitmapFactory.decodeResource(getResources(), R.drawable.prin);
+        bmp2 = BitmapFactory.decodeResource(getResources(), R.drawable.perfil3);
+
+        sprite = new Sprite(bmp2);
+        fondo = new FondosJuego(bmp);
 
         btnUp = (Button) findViewById(R.id.btnUp);
         btnDown = (Button) findViewById(R.id.btnDown);
@@ -74,14 +77,14 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 y += 100;
-
-
+                sprite.setCurrentFrame(0);
             }
         });
 
         btnDown.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 y -= 100;
+                sprite.setCurrentFrame(1);
             }
         });
 
@@ -89,21 +92,23 @@ public class MainActivity extends Activity {
         btnLeft.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 x += 100;
+                sprite.setCurrentFrame(3);
             }
         });
 
         btnRight.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 x -= 100;
+                sprite.setCurrentFrame(2);
+
             }
         });
 
     }
 
     public void onDraw(Canvas c) {
-        c.drawColor(Color.BLACK);
-        c.drawBitmap(bmp, x, y, null);
-        c.drawBitmap(bmp2,800,500,null);
+        fondo.onDraw(c,x,y);
+        sprite.onDraw(c);
     }
 
     public SurfaceView getSurface () {
